@@ -1,0 +1,35 @@
+﻿<Page
+    x:Class="ModernChatLite.MainWindowFrame"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ModernChatLite"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent">
+
+    <Grid>
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>-->
+
+        <Frame x:Name="contentFrame"
+               VerticalAlignment="Stretch"
+               Margin="0,32,0,0">
+
+        </Frame>
+        <Border x:Name="AppTitleBar" 
+                Height="32"
+                VerticalAlignment="Top"
+                Background="Transparent">
+            <TextBlock x:Name="AppTitle" 
+                       Text="AtomChat" 
+                       Style="{StaticResource CaptionTextBlockStyle}"
+                       FontSize="12"
+                       VerticalAlignment="Center"
+                       Margin="16,0,0,0"
+                       />
+        </Border>
+    </Grid>
+</Page>

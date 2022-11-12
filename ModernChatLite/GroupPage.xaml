@@ -1,0 +1,705 @@
+﻿<Page
+    x:Class="ModernChatLite.GroupPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ModernChatLite"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    >
+
+    <Page.Resources>
+        <CollectionViewSource x:Name="GroupMembersCVS" IsSourceGrouped="True"/>
+        <DataTemplate x:Key="InviteFriendsTemplate"
+                      x:DataType="local:ContactInfo">
+            <Grid Height="Auto" 
+                  Padding="0,8,8,8">
+                <RelativePanel>
+                    <PersonPicture x:Name="FriendAvatar" 
+                                   DisplayName="{x:Bind UserName}" 
+                                   Height="32"
+                                   VerticalAlignment="Center"/>
+                    <StackPanel RelativePanel.RightOf="FriendAvatar"
+                                Orientation="Vertical"
+                                VerticalAlignment="Center"
+                                Margin="8,0,0,0">
+                        <TextBlock Text="{x:Bind NickName_UserName}" 
+                                   Style="{StaticResource BaseTextBlockStyle}">
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>
+                                UID:
+                            </TextBlock>
+                            <TextBlock Margin="4,0,0,0" 
+                                       Text="{x:Bind UID}">
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </RelativePanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="GroupBriefTemplate"
+                      x:DataType="local:GroupInfo">
+            <Grid Padding="4,8,4,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <PersonPicture Height="32"
+                               DisplayName="{x:Bind GroupName}"
+                               Margin="0,4,8,4"
+                               Grid.Column="0"/>
+                <RelativePanel Grid.Column="1">
+                    <TextBlock Text="{x:Bind GroupName}"
+                               Margin="8,0,0,0"
+                               FontSize="16"
+                               Style="{ThemeResource BaseTextBlockStyle}"
+                               RelativePanel.AlignLeftWithPanel="True">
+                    </TextBlock>
+                    <!--<TextBlock Text="{x:Bind chats}"
+                               Margin="0,0,0,8"
+                               FontSize="14"
+                               RelativePanel.AlignRightWithPanel="True"
+                               Style="{ThemeResource BodyTextBlockStyle}">
+                    </TextBlock>-->
+                </RelativePanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="GroupChatContentTemplate"
+                      x:DataType="local:ChatContent">
+            <Grid Height="Auto"
+                  HorizontalAlignment="{x:Bind MsgAlignment}"
+                  Margin="0,8,0,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <PersonPicture DisplayName="{x:Bind Sender}"
+                               Grid.RowSpan="2"
+                               Grid.Column="{x:Bind AvatarColumn}"
+                               Height="40"
+                               Margin="8,8,8,8"
+                               VerticalAlignment="Top">
+
+                </PersonPicture>
+                <TextBlock Text="{x:Bind Sender}"
+                           Grid.Row="0"
+                           Grid.Column="{x:Bind ContentColumn}"
+                           FontSize="16"
+                           Margin="8,0,8,4"
+                           
+                           HorizontalAlignment="{x:Bind MsgAlignment}">
+
+                </TextBlock>
+                <StackPanel MinHeight="40" MinWidth="200" 
+                            Width="Auto"
+                            Padding="8, 0, 8, 0"
+                            Background="{ThemeResource SystemAccentColorLight1}" 
+                            CornerRadius="{StaticResource ControlCornerRadius}"
+                            Grid.Row="1"
+                            Grid.Column="{x:Bind ContentColumn}">
+                    <TextBlock Text="{x:Bind Content}" 
+                               Padding="0, 4, 0, 0" 
+                               FontSize="20" 
+                               Width="Auto"
+                               TextWrapping="Wrap"
+                               Foreground="{ThemeResource SystemChromeMediumColor}"/>
+                    <TextBlock Text="{x:Bind Timestamp}" 
+                               Padding="0, 0, 0, 4" 
+                               FontSize="15" 
+                               HorizontalAlignment="{x:Bind MsgAlignment}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid>
+        <SplitView x:Name="splitView" 
+               PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+           IsPaneOpen="True" 
+               OpenPaneLength="280" 
+               DisplayMode="Inline">
+            <SplitView.Pane>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="My Groups" 
+                           FontSize="20"
+                           Margin="24,12,0,0" 
+                           Style="{StaticResource BaseTextBlockStyle}"/>
+                    <StackPanel Grid.Row="1"
+                            Margin="8,8,0,0"
+                            Orientation="Horizontal">
+                        <Button x:Name="JoinGroupButton"
+                                Click="JoinGroupButton_Click"
+                            Style="{ThemeResource AccentButtonStyle}"
+                            VerticalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Find" />
+                                <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center">
+                                    Join Group
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="CreateGroupButton"
+                                Click="CreateGroupButton_Click"
+                            Style="{ThemeResource AccentButtonStyle}"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal">
+                                <PathIcon Data="F1 M 8.75 11.25 L 2.5 11.25 C 2.324219 11.25 2.159831 11.217448 2.006836 11.152344 C 1.853841 11.08724 1.722005 10.99935 1.611328 10.888672 C 1.500651 10.777995 1.41276 10.646159 1.347656 10.493164 C 1.282552 10.34017 1.25 10.175781 1.25 10 C 1.25 9.824219 1.282552 9.661459 1.347656 9.511719 C 1.41276 9.361979 1.502279 9.230144 1.616211 9.116211 C 1.730143 9.002279 1.861979 8.912761 2.011719 8.847656 C 2.161458 8.782553 2.324219 8.75 2.5 8.75 L 8.75 8.75 L 8.75 2.5 C 8.75 2.324219 8.782552 2.161459 8.847656 2.011719 C 8.91276 1.86198 9.002278 1.730145 9.116211 1.616211 C 9.230143 1.502279 9.361979 1.412762 9.511719 1.347656 C 9.661458 1.282553 9.824219 1.25 10 1.25 C 10.169271 1.25 10.330403 1.282553 10.483398 1.347656 C 10.636393 1.412762 10.769856 1.502279 10.883789 1.616211 C 10.997721 1.730145 11.087239 1.863607 11.152344 2.016602 C 11.217447 2.169598 11.25 2.33073 11.25 2.5 L 11.25 8.75 L 17.5 8.75 C 17.66927 8.75 17.830402 8.782553 17.983398 8.847656 C 18.136393 8.912761 18.269855 9.002279 18.383789 9.116211 C 18.497721 9.230144 18.587238 9.363607 18.652344 9.516602 C 18.717447 9.669597 18.75 9.830729 18.75 10 C 18.75 10.175781 18.717447 10.338542 18.652344 10.488281 C 18.587238 10.638021 18.497721 10.769857 18.383789 10.883789 C 18.269855 10.997722 18.13802 11.08724 17.988281 11.152344 C 17.838541 11.217448 17.675781 11.25 17.5 11.25 L 11.25 11.25 L 11.25 17.5 C 11.25 17.675781 11.217447 17.838541 11.152344 17.988281 C 11.087239 18.138021 10.997721 18.269857 10.883789 18.383789 C 10.769856 18.497721 10.638021 18.58724 10.488281 18.652344 C 10.338541 18.717447 10.175781 18.75 10 18.75 C 9.824219 18.75 9.65983 18.717447 9.506836 18.652344 C 9.353841 18.58724 9.222005 18.49935 9.111328 18.388672 C 9.00065 18.277994 8.91276 18.146158 8.847656 17.993164 C 8.782552 17.84017 8.75 17.675781 8.75 17.5 Z " VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center">
+                                    Create Group
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <ListView x:Name="GroupBriefList" 
+                          Margin="0,12,0,0" 
+                          SelectionMode="Single" 
+                          Grid.Row="2" 
+                          VerticalAlignment="Stretch" 
+                          IsItemClickEnabled="True"
+                          ItemTemplate="{StaticResource GroupBriefTemplate}"
+                          SelectionChanged="GroupBriefList_SelectionChanged"
+                          >
+                    </ListView>
+                </Grid>
+            </SplitView.Pane>
+            <Grid>
+                <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       x:Name="EmptyChatTextBlock"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       FontSize="24">
+                <Bold>No Group Selected</Bold>
+                </TextBlock>
+
+                <Grid x:Name="GroupDetailGrid"
+                  Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="160"/>
+                    </Grid.RowDefinitions>
+                    <RelativePanel>
+                        <StackPanel Orientation="Horizontal">
+                            <PersonPicture x:Name="CurrentGroupAvatar"
+                        Height="32"
+                               Margin="16,8,0,8"
+                               DisplayName=""/>
+                            <TextBlock x:Name="CurrentGroupName"
+                               Margin="8,0,0,0"
+                               FontSize="18"
+                               Style="{ThemeResource BaseTextBlockStyle}"
+                               VerticalAlignment="Center">
+                            </TextBlock>
+                        </StackPanel>
+                        <CommandBar RelativePanel.AlignRightWithPanel="True"
+                                DefaultLabelPosition="Right">
+                            <AppBarButton x:Name="RevokeButton"
+                                      Label="Revoke Message"
+                                      IsEnabled="False"
+                                      Click="RevokeButton_Click">
+                                <AppBarButton.Icon>
+                                    <SymbolIcon Symbol="Undo" />
+                                </AppBarButton.Icon>
+                            </AppBarButton>
+                            <AppBarButton x:Name="ManageGroupButton"
+                                      Label="Manage Group"
+                                      Click="ManageGroupButton_Click">
+                                <AppBarButton.Icon>
+                                    <SymbolIcon Symbol="Manage" />
+                                </AppBarButton.Icon>
+                            </AppBarButton>
+                        </CommandBar>
+                    </RelativePanel>
+                    <ListView x:Name="GroupChatContentList"
+                      SelectionMode="Single"
+                      Margin="8,8,8,12"
+                      ItemTemplate="{StaticResource GroupChatContentTemplate}"
+                          Grid.Row="1">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel ItemsUpdatingScrollMode="KeepLastItemInView"
+                              VerticalAlignment="Bottom"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    <Grid Grid.Row="2"
+                  Margin="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="MsgContentBox" 
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         Margin="4,0,4,0"
+                         AcceptsReturn="True"
+                         FontSize="16">
+                        </TextBox>
+                        <RelativePanel Grid.Row="1"
+                                   Margin="8,8,8,4">
+                            <Button x:Name="SendPictureButton"
+                                Click="SendPictureButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <SymbolIcon Symbol="Pictures" />
+                                    <TextBlock Margin="4,0,0,0">
+                                    Send Picture
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="SendFileButton"
+                                Grid.Row="1"
+                                RelativePanel.RightOf="SendPictureButton"
+                            Margin="4,0,0,0"
+                                Click="SendFileButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <SymbolIcon Symbol="Document" />
+                                    <TextBlock Margin="4,0,0,0">
+                                    Send File
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="SendButton"
+                            Grid.Row="1"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Style="{ThemeResource AccentButtonStyle}"
+                            Click="SendButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <SymbolIcon Symbol="Send" />
+                                    <TextBlock Margin="4,0,0,0">
+                            <Bold>Send</Bold>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </RelativePanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+        </SplitView>
+
+        <Grid x:Name="JoinGroupSmokeGrid"
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch" 
+              Visibility="Collapsed" 
+              >
+            <Grid.Background>
+                <SolidColorBrush Color="{ThemeResource SystemChromeAltHighColor}" 
+                                 Opacity="0.8" />
+            </Grid.Background>
+            <Grid CornerRadius="4" 
+                      BorderThickness="1" 
+                      BorderBrush="{ThemeResource SystemAccentColor}"
+                      Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+                      Width="480" 
+                  Height="600"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Padding="24,8,8,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <RelativePanel
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Width="Auto"
+                              Height="Auto">
+                    <Button x:Name="CloseJoinGroupButton"
+                            Style="{StaticResource AlternateCloseButtonStyle}"
+                                RelativePanel.AlignRightWithPanel="True"
+                                ToolTipService.ToolTip="Close"
+                                    Click="CloseJoinGroupButton_Click">
+
+                    </Button>
+                    <TextBlock x:Name="SearchNewGroupBlock"
+                                   Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                               Margin="0,8,0,0">
+                            Join an existing group
+                    </TextBlock>
+                </RelativePanel>
+                <StackPanel x:Name="SearchStackPanel"
+                            Orientation="Horizontal"
+                                    Margin="0,16,0,0"
+                            Padding="0,0,16,0"
+                            Grid.Row="1">
+                    <TextBox x:Name="QueryStringBox"
+                                Width="240"
+                                     PlaceholderText="GID/GroupName"
+                             TextChanged="QueryStringBox_TextChanged">
+
+                    </TextBox>
+                    <Button x:Name="SearchGroupButton"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    Margin="8,0,0,0"
+                                    Click="SearchGroupButton_Click"
+                            IsEnabled="False">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Find" />
+                            <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center">
+                                        Search
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <ListView x:Name="SearchResultListView"
+                            SelectionMode="Single"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                              Margin="0,12,0,0"
+                          Padding="0,0,16,0"
+                          Grid.Row="2">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:GroupInfo">
+                            <Grid Height="Auto"
+                                  Padding="8">
+                                <RelativePanel>
+                                    <PersonPicture x:Name="ResultAvatar"
+                                                       DisplayName="{x:Bind GroupName}"
+                                                       Height="32">
+
+                                    </PersonPicture>
+                                    <StackPanel RelativePanel.RightOf="ResultAvatar"
+                                                    Orientation="Vertical"
+                                                    VerticalAlignment="Center"
+                                                Margin="8,0,0,0">
+                                        <TextBlock Text="{x:Bind GroupName}"
+                                                   Style="{StaticResource BaseTextBlockStyle}">
+
+                                        </TextBlock>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>
+                                                    UID:
+                                            </TextBlock>
+                                            <TextBlock Margin="4,0,0,0"
+                                                           Text="{x:Bind GID}">
+
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Button x:Name="SendRequestButton"
+                                            RelativePanel.AlignRightWithPanel="True"
+                                                Tag="{x:Bind GID.ToString()}"
+                                                Click="SendRequestButton_Click"
+                                                VerticalAlignment="Center">
+                                        Send Request
+                                    </Button>
+                                </RelativePanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <InfoBar x:Name="NoGroupFoundInfoBar"
+                            IsOpen="False"
+                            Severity="Error"
+                            Title="Error"
+                            Message="No group found!"
+                            Margin="0,8,16,0"
+                         Grid.Row="2"
+                         IsClosable="False"/>
+            </Grid>
+        </Grid>
+        <Grid x:Name="CreateGroupSmokeGrid"
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch" 
+              Visibility="Collapsed" 
+              >
+            <Grid.Background>
+                <SolidColorBrush Color="{ThemeResource SystemChromeAltHighColor}" 
+                                 Opacity="0.8" />
+            </Grid.Background>
+            <Grid CornerRadius="4" 
+                      BorderThickness="1" 
+                      BorderBrush="{ThemeResource SystemAccentColor}"
+                      Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+                      Width="480" 
+                  Height="600"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Padding="24,8,8,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <RelativePanel
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Width="Auto"
+                              Height="Auto">
+                    <Button x:Name="CloseCreateGroupButton"
+                            Style="{StaticResource AlternateCloseButtonStyle}"
+                                RelativePanel.AlignRightWithPanel="True"
+                                ToolTipService.ToolTip="Close"
+                                    Click="CloseCreateGroupButton_Click">
+
+                    </Button>
+                    <TextBlock Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                               Margin="0,8,0,0">
+                            Create a new group
+                    </TextBlock>
+                </RelativePanel>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="1"
+                            Margin="0,16,0,0">
+                    <TextBlock FontSize="20" 
+                               Style="{StaticResource BaseTextBlockStyle}"
+                               VerticalAlignment="Center">
+                        Group Name:
+                    </TextBlock>
+                    <TextBox x:Name="NewGroupNameBox"
+                        PlaceholderText="New group name"
+                             Margin="8,0,0,0"
+                             Width="240">
+
+                    </TextBox>
+                </StackPanel>
+                <RelativePanel Grid.Row="2"
+                               Margin="0,24,0,0">
+                    <TextBlock Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                               RelativePanel.AlignVerticalCenterWithPanel="True">
+                            Invite your friends
+                    </TextBlock>
+                    <Button x:Name="ClearInvitationButton"
+                            Click="ClearInvitationButton_Click"
+                        RelativePanel.AlignRightWithPanel="True"
+                            Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal"
+                                    >
+                            <SymbolIcon Symbol="ClearSelection" />
+                            <TextBlock VerticalAlignment="Center"
+                                       Margin="8,0,0,0"
+                                       FontSize="16">
+                                Clear Selection
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </RelativePanel>
+
+                <ListView x:Name="InviteFriendsListView" 
+                              SelectionMode="Multiple"
+                              ItemTemplate="{StaticResource InviteFriendsTemplate}"
+                              Grid.Row="3"
+                          Margin="0,8,0,0">
+
+                </ListView>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="4"
+                            HorizontalAlignment="Center"
+                            Margin="0,8,0,0">
+                    <ProgressRing x:Name="CreateGroupProgressRing"
+                                  Visibility="Collapsed"
+                        IsActive="True" 
+                                  Margin="0,0,8,0"/>
+                    <Button x:Name="ConfirmCreateGroupButton"
+                            Click="ConfirmCreateGroupButton_Click"
+                            Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal"
+                                    >
+                            <SymbolIcon Symbol="Accept" 
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"/>
+                            <TextBlock VerticalAlignment="Center"
+                                       Margin="8,0,0,0"
+                                       FontSize="16">
+                                Create Now
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid x:Name="LoadingSmokeGrid"
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch" 
+              Visibility="Collapsed"
+              >
+            <Grid.Background>
+                <SolidColorBrush Color="{ThemeResource SystemChromeAltHighColor}" 
+                                 Opacity="0.8" />
+            </Grid.Background>
+            <Grid CornerRadius="4" 
+                      BorderThickness="1" 
+                      BorderBrush="{ThemeResource SystemAccentColor}"
+                      Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal"
+                            Margin="24">
+                    <ProgressRing x:Name="LoadingStatusRing">
+
+                    </ProgressRing>
+                    <TextBlock x:Name="LoadingSmokeGridText"
+                        Style="{StaticResource BaseTextBlockStyle}"
+                               FontSize="24"
+                               Margin="8,0,0,0"
+                               VerticalAlignment="Center">
+                        Loading your data...
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+        <Grid x:Name="ManageGroupSmokeGrid"
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch" 
+              Visibility="Collapsed"
+              >
+            <Grid.Background>
+                <SolidColorBrush Color="{ThemeResource SystemChromeAltHighColor}" 
+                                 Opacity="0.8" />
+            </Grid.Background>
+            <Grid CornerRadius="4" 
+                      BorderThickness="1" 
+                      BorderBrush="{ThemeResource SystemAccentColor}"
+                      Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+                      Width="480" 
+                  Height="600"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Padding="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <RelativePanel
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Width="Auto"
+                              Height="Auto">
+                    <Button x:Name="CloseManageGroupButton"
+                            Style="{StaticResource AlternateCloseButtonStyle}"
+                                RelativePanel.AlignRightWithPanel="True"
+                                ToolTipService.ToolTip="Close"
+                                    Click="CloseManageGroupButton_Click">
+
+                    </Button>
+                    <TextBlock Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                               Margin="8,8,0,0">
+                            Manage Group
+                    </TextBlock>
+                </RelativePanel>
+                <Grid Grid.Row="1">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,16,0,8"
+                                HorizontalAlignment="Center">
+                        <PersonPicture x:Name="MgmtCurrentGroupAvatar"
+                                       Height="48"
+                                       Margin="8,0,0,0">
+                            
+                        </PersonPicture>
+                        <StackPanel VerticalAlignment="Center"
+                                    Orientation="Vertical"
+                                    Margin="16,0,0,0">
+                            <TextBlock x:Name="MgmtCurrentGroupNameBlock"
+                                Style="{StaticResource BaseTextBlockStyle}"
+                                       FontSize="20">
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <TextBlock
+                                Style="{StaticResource BaseTextBlockStyle}"
+                                       FontSize="16">
+                                GID:
+                                </TextBlock>
+                                <TextBlock x:Name="MgmtCurrentGroupGIDBlock"
+                                       FontSize="16">
+                                </TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+                <ListView Grid.Row="2"
+                    ItemsSource="{x:Bind GroupMembersCVS.View, Mode=OneWay}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel AreStickyGroupHeadersEnabled="True"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:ContactInfo">
+                            <Grid Height="Auto"
+                                  Padding="8">
+                                <RelativePanel>
+                                    <PersonPicture x:Name="PersonAvatar"
+                                                       DisplayName="{x:Bind UserName}"
+                                                       Height="32">
+                                    </PersonPicture>
+                                    <StackPanel RelativePanel.RightOf="PersonAvatar"
+                                                    Orientation="Vertical"
+                                                    VerticalAlignment="Center"
+                                                Margin="8,0,0,0">
+                                        <TextBlock Text="{x:Bind UserName}"
+                                                       Style="{StaticResource BaseTextBlockStyle}">
+                                        </TextBlock>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>
+                                                    UID:
+                                            </TextBlock>
+                                            <TextBlock Margin="4,0,0,0"
+                                                           Text="{x:Bind UID}">
+
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Button x:Name="ChatWithGroupMemberButton"
+                                            RelativePanel.AlignRightWithPanel="True"
+                                                Tag="{x:Bind UID.ToString()}"
+                                                Click="ChatWithGroupMemberButton_Click"
+                                                VerticalAlignment="Center">
+                                        Start chat
+                                    </Button>
+                                </RelativePanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.GroupStyle>
+                        <GroupStyle >
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate x:DataType="local:GroupInfoDict">
+                                    <Border AutomationProperties.Name="{x:Bind Key}">
+                                        <TextBlock Text="{x:Bind Key}" Style="{ThemeResource TitleTextBlockStyle}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Page>

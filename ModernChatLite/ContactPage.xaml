@@ -1,0 +1,350 @@
+﻿<Page
+    x:Class="ModernChatLite.ContactPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ModernChatLite"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    >
+
+    <Page.Resources>
+        <DataTemplate x:Key="ContactBriefTemplate"
+                      x:DataType="local:ContactInfo">
+            <Grid Padding="4,8,4,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <PersonPicture Height="32"
+                               DisplayName="{x:Bind UserName}"
+                               Margin="0,4,8,4"
+                               Grid.Column="0"/>
+                <TextBlock Text="{x:Bind UserName}"
+                               Margin="8,0,0,0"
+                               FontSize="18"
+                               Style="{ThemeResource BaseTextBlockStyle}"
+                               Grid.Column="1"
+                           VerticalAlignment="Center">
+                </TextBlock>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid>
+
+        <SplitView x:Name="splitView" 
+               PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+           IsPaneOpen="True" 
+               OpenPaneLength="280" 
+               DisplayMode="Inline">
+            <SplitView.Pane>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="My Contacts" 
+                           FontSize="20"
+                           Margin="24,12,0,0" 
+                           Style="{StaticResource BaseTextBlockStyle}"/>
+                    <StackPanel Grid.Row="1"
+                            Margin="8,4,0,0">
+                        <Button x:Name="AddContactButton"
+                        Style="{ThemeResource AccentButtonStyle}"
+                            Click="AddContactButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <PathIcon Data="F1 M 8.671875 18.75 C 8.847656 18.984375 9.039713 19.205729 9.248047 19.414062 C 9.45638 19.622396 9.674479 19.817709 9.902344 20 L 3.701172 20 C 3.375651 20 3.064779 19.933268 2.768555 19.799805 C 2.472331 19.666342 2.211914 19.487305 1.987305 19.262695 C 1.762695 19.038086 1.583659 18.77767 1.450195 18.481445 C 1.316732 18.185221 1.25 17.87435 1.25 17.548828 L 1.25 2.451172 C 1.25 2.125652 1.316732 1.814779 1.450195 1.518555 C 1.583659 1.222332 1.762695 0.961914 1.987305 0.737305 C 2.211914 0.512695 2.472331 0.33366 2.768555 0.200195 C 3.064779 0.066732 3.375651 0 3.701172 0 L 13.798828 0 C 14.124349 0 14.435221 0.066732 14.731445 0.200195 C 15.027668 0.33366 15.288085 0.512695 15.512695 0.737305 C 15.737304 0.961914 15.91634 1.222332 16.049805 1.518555 C 16.183268 1.814779 16.25 2.125652 16.25 2.451172 L 16.25 7.431641 C 16.041666 7.373048 15.833332 7.327475 15.625 7.294922 C 15.416666 7.26237 15.208333 7.236328 15 7.216797 L 15 2.5 C 14.999999 2.33073 14.967447 2.169598 14.902344 2.016602 C 14.837239 1.863607 14.747721 1.730145 14.633789 1.616211 C 14.519856 1.502279 14.386393 1.412762 14.233398 1.347656 C 14.080402 1.282553 13.91927 1.25 13.75 1.25 L 3.75 1.25 C 3.574219 1.25 3.411458 1.282553 3.261719 1.347656 C 3.111979 1.412762 2.980143 1.502279 2.866211 1.616211 C 2.752279 1.730145 2.66276 1.86198 2.597656 2.011719 C 2.532552 2.161459 2.5 2.324219 2.5 2.5 L 2.5 16.25 L 7.431641 16.25 C 7.548828 16.686197 7.705078 17.102865 7.900391 17.5 L 2.5 17.5 C 2.5 17.675781 2.532552 17.84017 2.597656 17.993164 C 2.66276 18.146158 2.750651 18.277994 2.861328 18.388672 C 2.972005 18.49935 3.103841 18.58724 3.256836 18.652344 C 3.409831 18.717447 3.574219 18.75 3.75 18.75 Z M 12.5 2.5 C 12.669271 2.5 12.830403 2.532553 12.983398 2.597656 C 13.136393 2.662762 13.269855 2.752279 13.383789 2.866211 C 13.497721 2.980145 13.587239 3.113607 13.652344 3.266602 C 13.717447 3.419598 13.75 3.58073 13.75 3.75 L 13.75 5 C 13.75 5.175782 13.717447 5.338543 13.652344 5.488281 C 13.587239 5.638021 13.497721 5.769857 13.383789 5.883789 C 13.269855 5.997723 13.13802 6.08724 12.988281 6.152344 C 12.838541 6.217448 12.675781 6.25 12.5 6.25 L 5 6.25 C 4.824219 6.25 4.659831 6.217448 4.506836 6.152344 C 4.353841 6.08724 4.222005 5.99935 4.111328 5.888672 C 4.000651 5.777995 3.91276 5.646159 3.847656 5.493164 C 3.782552 5.34017 3.75 5.175782 3.75 5 L 3.75 3.75 C 3.75 3.574219 3.782552 3.411459 3.847656 3.261719 C 3.91276 3.11198 4.002278 2.980145 4.116211 2.866211 C 4.230143 2.752279 4.361979 2.662762 4.511719 2.597656 C 4.661458 2.532553 4.824219 2.5 5 2.5 Z M 5 5 L 12.5 5 L 12.5 3.75 L 5 3.75 Z M 20 14.375 C 20 15.14974 19.851887 15.878906 19.555664 16.5625 C 19.259439 17.246094 18.857422 17.841797 18.349609 18.349609 C 17.841797 18.857422 17.246094 19.259439 16.5625 19.555664 C 15.878906 19.851889 15.149739 20 14.375 20 C 13.59375 20 12.861328 19.853516 12.177734 19.560547 C 11.494141 19.267578 10.898438 18.867188 10.390625 18.359375 C 9.882812 17.851562 9.482422 17.255859 9.189453 16.572266 C 8.896484 15.888672 8.75 15.15625 8.75 14.375 C 8.75 13.600261 8.898111 12.871094 9.194336 12.1875 C 9.49056 11.503906 9.892578 10.908203 10.400391 10.400391 C 10.908203 9.892578 11.503906 9.490561 12.1875 9.194336 C 12.871093 8.898112 13.60026 8.75 14.375 8.75 C 14.889322 8.75 15.385741 8.816732 15.864258 8.950195 C 16.342773 9.083659 16.790363 9.272461 17.207031 9.516602 C 17.623697 9.760742 18.004557 10.055339 18.349609 10.400391 C 18.69466 10.745443 18.989258 11.126303 19.233398 11.542969 C 19.477539 11.959636 19.66634 12.407227 19.799805 12.885742 C 19.933268 13.364258 20 13.860678 20 14.375 Z M 17.5 14.375 C 17.5 14.205729 17.43815 14.059245 17.314453 13.935547 C 17.190754 13.81185 17.04427 13.75 16.875 13.75 L 15 13.75 L 15 11.875 C 14.999999 11.705729 14.93815 11.559245 14.814453 11.435547 C 14.690755 11.31185 14.544271 11.25 14.375 11.25 C 14.205729 11.25 14.059244 11.31185 13.935547 11.435547 C 13.811849 11.559245 13.75 11.705729 13.75 11.875 L 13.75 13.75 L 11.875 13.75 C 11.705729 13.75 11.559244 13.81185 11.435547 13.935547 C 11.311849 14.059245 11.25 14.205729 11.25 14.375 C 11.25 14.544271 11.311849 14.690756 11.435547 14.814453 C 11.559244 14.938151 11.705729 15 11.875 15 L 13.75 15 L 13.75 16.875 C 13.75 17.044271 13.811849 17.190756 13.935547 17.314453 C 14.059244 17.43815 14.205729 17.5 14.375 17.5 C 14.544271 17.5 14.690755 17.43815 14.814453 17.314453 C 14.93815 17.190756 14.999999 17.044271 15 16.875 L 15 15 L 16.875 15 C 17.04427 15 17.190754 14.938151 17.314453 14.814453 C 17.43815 14.690756 17.5 14.544271 17.5 14.375 Z " VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center">
+                                    Add Contact
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <ListView x:Name="ContactBriefList" 
+                          Margin="0,12,0,0" 
+                          SelectionMode="Single" 
+                          Grid.Row="2" 
+                          VerticalAlignment="Stretch" 
+                          IsItemClickEnabled="True"
+                          ItemTemplate="{StaticResource ContactBriefTemplate}"
+                          SelectionChanged="ContactBriefList_SelectionChanged">
+                    </ListView>
+                </Grid>
+
+            </SplitView.Pane>
+
+            <Grid>
+                <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       x:Name="EmptyContactTextBlock"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       FontSize="24">
+                <Bold>No Contact Selected</Bold>
+                </TextBlock>
+
+                <Grid x:Name="ContactDetailGrid"
+                  Visibility="Collapsed">
+                    <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Margin="0,24,0,0">
+                        <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,8">
+                            <PersonPicture x:Name="AvatarPicture"
+                                       Height="120"
+                                       Margin="0,0,12,0"
+                                       />
+                            <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center">
+                                <TextBlock x:Name="NickNameBlock"
+                                   Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Margin="8,0,8,0"
+                                   VerticalAlignment="Center"
+                                       >
+                                </TextBlock>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                   Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="16"
+                                   Margin="8,4,4,4">
+                                    UserName:
+                                    </TextBlock>
+                                    <TextBlock x:Name="UserNameBlock"
+                                   FontSize="16"
+                                   Margin="0,4,0,4">
+                                    </TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                   Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="16"
+                                   Margin="8,4,4,4">
+                                    UID:
+                                    </TextBlock>
+                                    <TextBlock x:Name="UIDBlock"
+                                   FontSize="16"
+                                   Margin="0,4,0,4">
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                   Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="16"
+                                   Margin="8,4,4,4">
+                                    Birthday:
+                            </TextBlock>
+                            <TextBlock x:Name="BirthdayBlock"
+                                   FontSize="16"
+                                   Margin="0,4,0,4">
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                   Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="16"
+                                   Margin="8,4,4,4">
+                                    What's up:
+                            </TextBlock>
+                            <TextBlock x:Name="WhatsUpBlock"
+                                   FontSize="16"
+                                   Margin="0,4,0,4">
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,16,0,0">
+                            <Button x:Name="StartChatButton"
+                                    Click="StartChatButton_Click"
+                                Style="{ThemeResource AccentButtonStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <SymbolIcon Symbol="Message" />
+                                    <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center">
+                                    Start Chat
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="DeleteContactButton"
+                                    Click="DeleteContactButton_Click"
+                                Margin="8,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <SymbolIcon Symbol="Delete" />
+                                    <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center">
+                                    Delete Contact
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+        </SplitView>
+
+        <Grid x:Name="AddContactSmokeGrid"
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch" 
+              Visibility="Collapsed" 
+              >
+            <Grid.Background>
+                <SolidColorBrush Color="{ThemeResource SystemChromeAltHighColor}" 
+                                 Opacity="0.8" />
+            </Grid.Background>
+            <Grid CornerRadius="4" 
+                      BorderThickness="1" 
+                      BorderBrush="{ThemeResource SystemAccentColor}"
+                      Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+                      Width="480" 
+                  Height="600"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Padding="24,8,8,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <RelativePanel
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Width="Auto"
+                              Height="Auto">
+                    <Button x:Name="CloseAddContactButton"
+                            Style="{StaticResource AlternateCloseButtonStyle}"
+                                RelativePanel.AlignRightWithPanel="True"
+                                ToolTipService.ToolTip="Close"
+                                    Click="CloseAddContactButton_Click">
+
+                    </Button>
+                    <TextBlock x:Name="SearchNewContactBlock"
+                                   Style="{StaticResource BaseTextBlockStyle}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                               Margin="0,8,0,0">
+                            Search for new contact
+                    </TextBlock>
+                </RelativePanel>
+                <StackPanel x:Name="SearchStackPanel"
+                            Orientation="Horizontal"
+                                    Margin="0,16,0,0"
+                            Padding="0,0,16,0"
+                            Grid.Row="1">
+                    <TextBox x:Name="QueryStringBox"
+                                Width="240"
+                                     PlaceholderText="UID/UserName"
+                             TextChanged="QueryStringBox_TextChanged">
+
+                    </TextBox>
+                    <Button x:Name="SearchNewContactButton"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    Margin="8,0,0,0"
+                                    Click="SearchNewContactButton_Click"
+                            IsEnabled="False">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Find" />
+                            <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center">
+                                        Search
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <ListView x:Name="SearchResultListView"
+                            SelectionMode="Single"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                              Margin="0,12,0,0"
+                          Padding="0,0,16,0"
+                          Grid.Row="2">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:ContactInfo">
+                            <Grid Height="Auto"
+                                  Padding="8">
+                                <RelativePanel>
+                                    <PersonPicture x:Name="ResultAvatar"
+                                                       DisplayName="{x:Bind UserName}"
+                                                       Height="32">
+
+                                    </PersonPicture>
+                                    <StackPanel RelativePanel.RightOf="ResultAvatar"
+                                                    Orientation="Vertical"
+                                                    VerticalAlignment="Center"
+                                                Margin="8,0,0,0">
+                                        <TextBlock Text="{x:Bind UserName}"
+                                                       Style="{StaticResource BaseTextBlockStyle}">
+
+                                        </TextBlock>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>
+                                                    UID:
+                                            </TextBlock>
+                                            <TextBlock Margin="4,0,0,0"
+                                                           Text="{x:Bind UID}">
+
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Button x:Name="SendRequestButton"
+                                            RelativePanel.AlignRightWithPanel="True"
+                                                Tag="{x:Bind UID.ToString()}"
+                                                Click="SendRequestButton_Click"
+                                                VerticalAlignment="Center">
+                                        Send Request
+                                    </Button>
+                                </RelativePanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <InfoBar x:Name="NoUserFoundInfoBar"
+                            IsOpen="False"
+                            Severity="Error"
+                            Title="Error"
+                            Message="No user found!"
+                            Margin="0,8,16,0"
+                         Grid.Row="2"
+                         IsClosable="False"/>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="DeletingSmokeGrid"
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch" 
+              Visibility="Collapsed"
+              >
+            <Grid.Background>
+                <SolidColorBrush Color="{ThemeResource SystemChromeAltHighColor}" 
+                                 Opacity="0.8" />
+            </Grid.Background>
+            <Grid CornerRadius="4" 
+                      BorderThickness="1" 
+                      BorderBrush="{ThemeResource SystemAccentColor}"
+                      Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal"
+                            Margin="24">
+                    <ProgressRing x:Name="LoadingStatusRing">
+
+                    </ProgressRing>
+                    <TextBlock Style="{StaticResource BaseTextBlockStyle}"
+                               FontSize="24"
+                               Margin="8,0,0,0"
+                               VerticalAlignment="Center">
+                        Deleting Contact...
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Page>

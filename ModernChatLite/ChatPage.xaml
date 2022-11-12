@@ -1,0 +1,235 @@
+﻿<Page
+    x:Class="ModernChatLite.ChatPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ModernChatLite"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    >
+
+    <Page.Resources>
+        <DataTemplate x:Key="ChatUserBriefTemplate"
+                      x:DataType="local:ChatWithUser">
+            <Grid Padding="4,8,4,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <PersonPicture Height="32"
+                               DisplayName="{x:Bind UserName}"
+                               Margin="0,4,8,4"
+                               Grid.Column="0"/>
+                <RelativePanel Grid.Column="1">
+                    <TextBlock Text="{x:Bind NickName}"
+                               Margin="8,0,0,0"
+                               FontSize="16"
+                               Style="{ThemeResource BaseTextBlockStyle}"
+                               RelativePanel.AlignLeftWithPanel="True">
+
+                    </TextBlock>
+                    <TextBlock Text="{x:Bind LastMsgTime}"
+                               Margin="0,0,0,8"
+                               FontSize="14"
+                               RelativePanel.AlignRightWithPanel="True"
+                               Style="{ThemeResource BodyTextBlockStyle}">
+
+                    </TextBlock>
+                </RelativePanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="ChatContentTemplate"
+                      x:DataType="local:ChatContent">
+            <Grid Height="Auto"
+                  HorizontalAlignment="{x:Bind MsgAlignment}"
+                  Margin="0,8,0,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <PersonPicture DisplayName="{x:Bind Sender}"
+                               Grid.RowSpan="2"
+                               Grid.Column="{x:Bind AvatarColumn}"
+                               Height="40"
+                               Margin="8,8,8,8"
+                               VerticalAlignment="Top">
+
+                </PersonPicture>
+                <TextBlock Text="{x:Bind Sender}"
+                           Grid.Row="0"
+                           Grid.Column="{x:Bind ContentColumn}"
+                           FontSize="16"
+                           Margin="8,0,8,4"
+                           HorizontalAlignment="{x:Bind MsgAlignment}">
+
+                </TextBlock>
+                <StackPanel MinHeight="40" MinWidth="200" 
+                            Width="Auto"
+                            Padding="8, 0, 8, 0"
+                            Background="{ThemeResource SystemAccentColorLight1}" 
+                            CornerRadius="{StaticResource ControlCornerRadius}"
+                            Grid.Row="1"
+                            Grid.Column="{x:Bind ContentColumn}">
+                    <TextBlock Text="{x:Bind Content,Mode=OneWay}"
+                               Padding="0, 4, 0, 0" 
+                               FontSize="20" 
+                               Width="Auto"
+                               TextWrapping="Wrap"
+                               Foreground="{ThemeResource SystemChromeMediumColor}"/>
+                    <TextBlock Text="{x:Bind Timestamp}" 
+                               Padding="0, 0, 0, 4" 
+                               FontSize="15" 
+                               HorizontalAlignment="{x:Bind MsgAlignment}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <SplitView x:Name="splitView" 
+               PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+           IsPaneOpen="True" 
+               OpenPaneLength="280" 
+               DisplayMode="Inline">
+        <SplitView.Pane>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Recent Chats" 
+                           FontSize="20"
+                           x:Name="PaneHeader" 
+                           Margin="24,12,0,0" 
+                           Style="{StaticResource BaseTextBlockStyle}"/>
+                <ListView x:Name="ChatUserBriefList" 
+                          Margin="0,12,0,0" 
+                          SelectionMode="Single" 
+                          Grid.Row="1" 
+                          VerticalAlignment="Stretch" 
+                          IsItemClickEnabled="True"
+                          ItemTemplate="{StaticResource ChatUserBriefTemplate}"
+                          SelectionChanged="ChatUserBriefList_SelectionChanged"
+                          >
+                </ListView>
+            </Grid>
+
+        </SplitView.Pane>
+
+        <Grid>
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       x:Name="EmptyChatTextBlock"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       FontSize="24">
+                <Bold>No Session Selected</Bold>
+            </TextBlock>
+
+            <Grid x:Name="ChatDetailGrid"
+                  Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="160"/>
+                </Grid.RowDefinitions>
+                <RelativePanel>
+                    <StackPanel Orientation="Horizontal">
+                        <PersonPicture x:Name="CurrentChatTargetAvatar"
+                        Height="32"
+                               Margin="16,8,0,8"
+                               DisplayName=""/>
+                        <TextBlock x:Name="CurrentChatTargetName"
+                               Margin="8,0,0,0"
+                               FontSize="18"
+                               Style="{ThemeResource BaseTextBlockStyle}"
+                               VerticalAlignment="Center">
+
+                        </TextBlock>
+                    </StackPanel>
+                    <CommandBar RelativePanel.AlignRightWithPanel="True"
+                                DefaultLabelPosition="Right">
+                        <AppBarButton x:Name="RevokeButton"
+                                      Label="Revoke Message"
+                                      IsEnabled="False"
+                                      Click="RevokeButton_Click">
+                            <AppBarButton.Icon>
+                                <SymbolIcon Symbol="Undo" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                    </CommandBar>
+                </RelativePanel>
+                <ListView x:Name="ChatContentList"
+                      SelectionMode="Single"
+                      Margin="8,8,8,12"
+                      ItemTemplate="{StaticResource ChatContentTemplate}"
+                          Grid.Row="1"
+                          SelectionChanged="ChatContentList_SelectionChanged">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel ItemsUpdatingScrollMode="KeepLastItemInView"
+                              VerticalAlignment="Bottom"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+                <Grid Grid.Row="2"
+                  Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="MsgContentBox" 
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         Margin="4,0,4,0"
+                         AcceptsReturn="True"
+                         FontSize="16">
+                    </TextBox>
+                    <RelativePanel Grid.Row="1"
+                                   Margin="8,8,8,4">
+                        <Button x:Name="SendPictureButton"
+                                Click="SendPictureButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Pictures" />
+                                <TextBlock Margin="4,0,0,0">
+                                    Send Picture
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="SendFileButton"
+                                Grid.Row="1"
+                                RelativePanel.RightOf="SendPictureButton"
+                            Margin="4,0,0,0"
+                                Click="SendFileButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Document" />
+                                <TextBlock Margin="4,0,0,0">
+                                    Send File
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="SendButton"
+                            Grid.Row="1"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Style="{ThemeResource AccentButtonStyle}"
+                            Click="SendButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Send" />
+                                <TextBlock Margin="4,0,0,0">
+                            <Bold>Send</Bold>
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </RelativePanel>
+                </Grid>
+            </Grid>
+        </Grid>
+    </SplitView>
+</Page>

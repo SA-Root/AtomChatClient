@@ -1,0 +1,125 @@
+﻿<Page
+    x:Class="ModernChatLite.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ModernChatLite"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    >
+    <Grid>
+        <StackPanel
+        Orientation="Vertical" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                >
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+                <Image 
+                   Height="80"
+                   Width="80"
+                   Stretch="Fill"
+                Source="/Assets/StoreLogo.scale-400.png" ></Image>
+                <TextBlock FontSize="40"
+                   Margin="16,0,0,0"
+                       VerticalAlignment="Center">
+                <Bold>AtomChat</Bold>
+                </TextBlock>
+            </StackPanel>
+            <TextBlock FontSize="28"
+                   HorizontalAlignment="Center"
+                   Margin="0,16,0,0"
+                   Foreground="{StaticResource SystemAccentColor}">
+            <Bold>Sign in</Bold>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal"
+                    Margin="0,16,0,0">
+                <SymbolIcon Symbol="Contact" />
+                <TextBox x:Name="UserNameBox"
+            Width="{x:Bind InputBoxWidth}"
+                     Header="User Name"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                 Margin="8,8,0,0"
+                     PlaceholderText="User Name">
+
+                </TextBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <SymbolIcon Symbol="Permissions" />
+                <PasswordBox x:Name="PwdBox"
+                        Width="{x:Bind InputBoxWidth}"
+                     Header="Password"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Margin="8,8,0,0"
+                     PlaceholderText="Password">
+                </PasswordBox>
+            </StackPanel>
+
+
+            <Button x:Name="LoginButtonX" 
+                Click="LoginButtonX_Click"
+                HorizontalAlignment="Center"
+                Style="{StaticResource AccentButtonStyle}"
+                Width="{x:Bind ButtonWidth}"
+                Margin="0,16,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <PathIcon Data="F1 M 17.5 9.951172 L 17.5 17.548828 C 17.5 17.87435 17.433268 18.185221 17.299805 18.481445 C 17.16634 18.77767 16.987305 19.038086 16.762695 19.262695 C 16.538086 19.487305 16.277668 19.666342 15.981445 19.799805 C 15.685221 19.933268 15.374349 20 15.048828 20 L 4.951172 20 C 4.625651 20 4.314778 19.933268 4.018555 19.799805 C 3.722331 19.666342 3.461914 19.487305 3.237305 19.262695 C 3.012695 19.038086 2.833659 18.77767 2.700195 18.481445 C 2.566732 18.185221 2.5 17.87435 2.5 17.548828 L 2.5 9.951172 C 2.5 9.632162 2.565104 9.326172 2.695312 9.033203 C 2.825521 8.740234 3.001302 8.479818 3.222656 8.251953 C 3.44401 8.024089 3.701172 7.841797 3.994141 7.705078 C 4.287109 7.568359 4.593099 7.5 4.912109 7.5 L 5 7.5 L 5 5 C 5 4.296876 5.130208 3.644207 5.390625 3.041992 C 5.651042 2.439779 6.005859 1.917318 6.455078 1.474609 C 6.904297 1.031902 7.433268 0.683594 8.041992 0.429688 C 8.650716 0.175781 9.303385 0.048828 10 0.048828 C 10.494791 0.048828 10.976562 0.117188 11.445312 0.253906 C 11.914062 0.390625 12.351888 0.587566 12.758789 0.844727 C 13.165689 1.101889 13.527018 1.416016 13.842773 1.787109 C 14.158528 2.158203 14.410807 2.574871 14.599609 3.037109 C 14.63216 3.121746 14.648437 3.203125 14.648438 3.28125 C 14.648437 3.463543 14.591471 3.613281 14.477539 3.730469 C 14.363606 3.847656 14.215494 3.90625 14.033203 3.90625 C 13.883463 3.90625 13.766275 3.870443 13.681641 3.798828 C 13.597005 3.727215 13.51888 3.636068 13.447266 3.525391 C 13.317057 3.317059 13.198242 3.113607 13.09082 2.915039 C 12.983398 2.716473 12.838541 2.526043 12.65625 2.34375 C 12.304687 1.985678 11.897785 1.71875 11.435547 1.542969 C 10.973307 1.367188 10.494791 1.279297 10 1.279297 C 9.479166 1.279297 8.990885 1.375326 8.535156 1.567383 C 8.079427 1.759441 7.682291 2.021484 7.34375 2.353516 C 7.005208 2.685547 6.738281 3.077801 6.542969 3.530273 C 6.347656 3.982748 6.25 4.472657 6.25 5 L 6.25 7.5 L 15.048828 7.5 C 15.374349 7.5 15.685221 7.566732 15.981445 7.700195 C 16.277668 7.83366 16.538086 8.012696 16.762695 8.237305 C 16.987305 8.461914 17.16634 8.722331 17.299805 9.018555 C 17.433268 9.314779 17.5 9.625651 17.5 9.951172 Z M 16.25 10 C 16.25 9.830729 16.217447 9.669597 16.152344 9.516602 C 16.087238 9.363607 15.997721 9.230144 15.883789 9.116211 C 15.769856 9.002279 15.636393 8.912761 15.483398 8.847656 C 15.330403 8.782553 15.169271 8.75 15 8.75 L 5 8.75 C 4.824219 8.75 4.661458 8.782553 4.511719 8.847656 C 4.361979 8.912761 4.230143 9.002279 4.116211 9.116211 C 4.002278 9.230144 3.91276 9.361979 3.847656 9.511719 C 3.782552 9.661459 3.75 9.824219 3.75 10 L 3.75 17.5 C 3.75 17.675781 3.782552 17.84017 3.847656 17.993164 C 3.91276 18.146158 4.000651 18.277994 4.111328 18.388672 C 4.222005 18.49935 4.353841 18.58724 4.506836 18.652344 C 4.659831 18.717447 4.824219 18.75 5 18.75 L 15 18.75 C 15.17578 18.75 15.338541 18.717447 15.488281 18.652344 C 15.638021 18.58724 15.769856 18.497721 15.883789 18.383789 C 15.997721 18.269857 16.087238 18.138021 16.152344 17.988281 C 16.217447 17.838541 16.25 17.675781 16.25 17.5 Z M 11.25 13.75 C 11.25 13.925781 11.217447 14.088542 11.152344 14.238281 C 11.087239 14.388021 10.997721 14.519857 10.883789 14.633789 C 10.769856 14.747722 10.638021 14.83724 10.488281 14.902344 C 10.338541 14.967448 10.175781 15 10 15 C 9.824219 15 9.65983 14.967448 9.506836 14.902344 C 9.353841 14.83724 9.222005 14.74935 9.111328 14.638672 C 9.00065 14.527995 8.91276 14.396159 8.847656 14.243164 C 8.782552 14.09017 8.75 13.925781 8.75 13.75 C 8.75 13.574219 8.782552 13.411459 8.847656 13.261719 C 8.91276 13.111979 9.002278 12.980144 9.116211 12.866211 C 9.230143 12.752279 9.361979 12.662761 9.511719 12.597656 C 9.661458 12.532553 9.824219 12.5 10 12.5 C 10.169271 12.5 10.330403 12.532553 10.483398 12.597656 C 10.636393 12.662761 10.769856 12.752279 10.883789 12.866211 C 10.997721 12.980144 11.087239 13.113607 11.152344 13.266602 C 11.217447 13.419597 11.25 13.580729 11.25 13.75 Z " VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <TextBlock FontSize="16"
+                    Margin="8,0,0,0">
+                    <Bold>Login</Bold>
+                    </TextBlock>
+                </StackPanel>
+            </Button>
+            <Button x:Name="RegisterButton" 
+                Click="RegisterButton_Click"
+                HorizontalAlignment="Center"
+                Width="{x:Bind ButtonWidth}"
+                Margin="0,8,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="AddFriend" />
+                    <TextBlock FontSize="16"
+                    Margin="8,0,0,0">
+                    <Bold>Register</Bold>
+                    </TextBlock>
+                </StackPanel>
+            </Button>
+            <HyperlinkButton x:Name="WebClientButton" 
+                Click="WebClientButton_Click"
+                HorizontalAlignment="Center"
+                Width="{x:Bind ButtonWidth}"
+                Margin="0,8,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Globe" />
+                    <TextBlock FontSize="16"
+                    Margin="8,0,0,0">
+                    <Bold>Web Client</Bold>
+                    </TextBlock>
+                </StackPanel>
+            </HyperlinkButton>
+
+            <InfoBar x:Name="LoginErrorInfoBar"
+            IsOpen="False"
+            Severity="Error"
+            Title="Error"
+            Message="Wrong User Name or Password!"
+                 Margin="0,8,0,0"/>
+        </StackPanel>
+        <!--<Border x:Name="AppTitleBar" 
+                Height="48"
+                VerticalAlignment="Top"
+                IsHitTestVisible="True"
+                Background="Transparent">
+            <TextBlock x:Name="AppTitle" 
+                       Text="AtomChat" 
+                       Style="{StaticResource CaptionTextBlockStyle}"
+                       FontSize="12"
+                       VerticalAlignment="Top"
+                       Margin="16,8,0,0"
+                       />
+        </Border>-->
+    </Grid>
+
+</Page>

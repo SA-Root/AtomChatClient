@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "ModernChatLite (Package)": {
+      "commandName": "MsixPackage",
+      "nativeDebugging": false
+    },
+    "ModernChatLite (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

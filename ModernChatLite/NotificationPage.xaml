@@ -1,0 +1,94 @@
+﻿<Page
+    x:Class="ModernChatLite.NotificationPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ModernChatLite"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    >
+    <Page.Resources>
+        <DataTemplate x:Key="NotificationTemplate"
+                      x:DataType="local:NotificationContent">
+            <Grid Margin="0,8,0,8"
+                  Padding="0,8,0,8">
+                <RelativePanel>
+                    <StackPanel Orientation="Horizontal">
+                        <PersonPicture DisplayName="{x:Bind SenderName}"
+                                       Height="32">
+                            
+                        </PersonPicture>
+                        <TextBlock Style="{StaticResource BaseTextBlockStyle}"
+                                   Text="{x:Bind Message}"
+                                   VerticalAlignment="Center"
+                                   Margin="8,0,0,0">
+                            
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                RelativePanel.AlignRightWithPanel="True">
+                        <Button x:Name="AcceptButton"
+                            Background="Green"
+                                Click="AcceptButton_Click"
+                                Tag="{x:Bind NID.ToString()}">
+                            <StackPanel Orientation="Horizontal">
+                                <PathIcon Data="F1 M 2.5 10.625 C 2.5 10.455729 2.561849 10.309245 2.685547 10.185547 C 2.809245 10.06185 2.955729 10 3.125 10 C 3.294271 10 3.440755 10.06185 3.564453 10.185547 L 7.5 14.111328 L 16.435547 5.185547 C 16.559244 5.06185 16.705729 5.000001 16.875 5 C 17.04427 5.000001 17.190754 5.06185 17.314453 5.185547 C 17.43815 5.309245 17.5 5.455729 17.5 5.625 C 17.5 5.794271 17.43815 5.940756 17.314453 6.064453 L 7.939453 15.439453 C 7.815755 15.563151 7.669271 15.625 7.5 15.625 C 7.330729 15.625 7.184245 15.563151 7.060547 15.439453 L 2.685547 11.064453 C 2.561849 10.940756 2.5 10.794271 2.5 10.625 Z " VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center">
+                                    Accept
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="RejectButton"
+                            Background="Red"
+                                Click="RejectButton_Click"
+                                Margin="4,0,4,0"
+                                Tag="{x:Bind NID.ToString()}">
+                            <StackPanel Orientation="Horizontal">
+                                <PathIcon Data="F1 M 10.253906 9.375 L 16.064453 15.185547 C 16.18815 15.309245 16.25 15.455729 16.25 15.625 C 16.25 15.794271 16.18815 15.940756 16.064453 16.064453 C 15.940754 16.188152 15.79427 16.25 15.625 16.25 C 15.455729 16.25 15.309244 16.188152 15.185547 16.064453 L 9.375 10.253906 L 3.564453 16.064453 C 3.440755 16.188152 3.294271 16.25 3.125 16.25 C 2.955729 16.25 2.809245 16.188152 2.685547 16.064453 C 2.561849 15.940756 2.5 15.794271 2.5 15.625 C 2.5 15.455729 2.561849 15.309245 2.685547 15.185547 L 8.496094 9.375 L 2.685547 3.564453 C 2.561849 3.440756 2.5 3.294271 2.5 3.125 C 2.5 2.95573 2.561849 2.809246 2.685547 2.685547 C 2.809245 2.56185 2.955729 2.5 3.125 2.5 C 3.294271 2.5 3.440755 2.56185 3.564453 2.685547 L 9.375 8.496094 L 15.185547 2.685547 C 15.309244 2.56185 15.455729 2.5 15.625 2.5 C 15.79427 2.5 15.940754 2.56185 16.064453 2.685547 C 16.18815 2.809246 16.25 2.95573 16.25 3.125 C 16.25 3.294271 16.18815 3.440756 16.064453 3.564453 Z " VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center">
+                                    Reject
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </RelativePanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    
+    <Grid>
+        <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       x:Name="EmptyNotificationBlock"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       FontSize="24">
+                <Bold>No Notifications</Bold>
+        </TextBlock>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <CommandBar DefaultLabelPosition="Right"
+                        Margin="0,0,8,0">
+                <AppBarButton x:Name="DeleteNotificationButton"
+                                      Label="Delete Selected"
+                              IsEnabled="False"
+                                      Click="DeleteNotificationButton_Click">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Delete" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar>
+            <ListView x:Name="NotificationListView" 
+                      Margin="8,4,8,8"
+                      Grid.Row="1"
+                  SelectionMode="Multiple"
+                  ItemTemplate="{StaticResource NotificationTemplate}">
+
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>
