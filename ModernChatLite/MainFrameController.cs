@@ -14,6 +14,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using System.Diagnostics;
+using SocketIOClient;
+using SocketIOClient.Transport;
 
 namespace ModernChatLite
 {
@@ -24,6 +26,23 @@ namespace ModernChatLite
         public static NavigationViewItem chatItem = null;
         public static NavigationView mainNavigationView = null;
         public static Window mainWindow = null;
+        public static SocketIO WSClient = null;
+        private static readonly string WSServer = "http://127.0.0.1:11000/";
+        public static void InitWSClient()
+        {
+            if (WSClient == null)
+            {
+                WSClient = new SocketIO(WSServer);
+                WSClient.OnConnected += async (sender, e) =>
+                {
+                    Debug.Print("[INFO]WSConnected");
+                };
+            }
+            else if (!WSClient.Connected)
+            {
+                WSClient.ConnectAsync();
+            }
+        }
         public static void SetTitleBar(UIElement uie)
         {
             mainWindow?.SetTitleBar(uie);
