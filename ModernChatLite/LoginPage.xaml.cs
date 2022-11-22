@@ -38,23 +38,53 @@ namespace ModernChatLite
             MainFrameController.NavigateToPage(typeof(RegisterPage));
         }
 
-        private void LoginButtonX_Click(object sender, RoutedEventArgs e)
+        private async void LoginButtonX_Click(object sender, RoutedEventArgs e)
         {
-            MainFrameController.NavigateToPage(typeof(MainPage));
+            var res = await MainFrameController.NService.SendLoginRequestAsync(new LoginRequest
+            {
+                UserName = UserNameBox.Text,
+                Password = PwdBox.Password,
+                IsLoginFree = false
+            });
+            if (res != null)
+            {
+                CurrentUserDatas.currentUserInfo = new()
+                {
+                    UID = uint.Parse(res.UID)
+                };
+                CurrentUserDatas.Token= res.Token;
+                MainFrameController.NavigateToPage(typeof(MainPage));
+            }
+            else
+            {
+                ContentDialog dialog = new()
+                {
+                    // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+                    XamlRoot = this.XamlRoot,
+                    Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
+                    Title = "Login Failed",
+                    PrimaryButtonText = "OK",
+                    DefaultButton = ContentDialogButton.Primary,
+                    RequestedTheme = MainFrameController.topFrame.RequestedTheme
+                };
+
+                await dialog.ShowAsync();
+            }
         }
 
         private async void WebClientButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentDialog dialog = new ContentDialog();
-
-            // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-            dialog.XamlRoot = this.XamlRoot;
-            dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            dialog.Title = "Switch to Web Client?";
-            dialog.PrimaryButtonText = "Now";
-            dialog.CloseButtonText = "Later";
-            dialog.DefaultButton = ContentDialogButton.Primary;
-            dialog.RequestedTheme = MainFrameController.topFrame.RequestedTheme;
+            ContentDialog dialog = new()
+            {
+                // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+                XamlRoot = this.XamlRoot,
+                Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
+                Title = "Switch to Web Client?",
+                PrimaryButtonText = "Now",
+                CloseButtonText = "Later",
+                DefaultButton = ContentDialogButton.Primary,
+                RequestedTheme = MainFrameController.topFrame.RequestedTheme
+            };
 
             var result = await dialog.ShowAsync();
             if (result is ContentDialogResult.Primary)

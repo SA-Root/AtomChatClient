@@ -17,6 +17,7 @@ namespace ModernChatLite
         public static ObservableCollection<GroupInfo> groupInfos;
         public static ObservableCollection<NotificationContent> Notifications;
         public static ContactInfo currentUserInfo;
+        public static string Token;
         public static int ChatJumpIdx = -1;
         static CurrentUserDatas()
         {

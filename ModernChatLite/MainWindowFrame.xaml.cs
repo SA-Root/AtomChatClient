@@ -31,7 +31,8 @@ namespace ModernChatLite
             this.InitializeComponent();
 
             MainFrameController.contentFrame = contentFrame;
-            MainFrameController.NavigateToPage(typeof(LoginPage));
+            //MainFrameController.NavigateToPage(typeof(LoginPage));
+            MainFrameController.NavigateToWebPage("http://10.0.0.55");
 
             mainWindow.ExtendsContentIntoTitleBar = true;
             mainWindow.SetTitleBar(AppTitleBar);
