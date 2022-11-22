@@ -47,28 +47,30 @@ namespace ModernChatLite
         {
             var cul = CultureInfo.CreateSpecificCulture("en-US");
 
-            var tmpList = new List<ChatWithUser>();
-            tmpList.Add(new ChatWithUser
+            var tmpList = new List<ChatWithUser>
             {
-                UserName = "Aello1",
-                NickName = "Nick1",
-                UID = 1344250,
-                chats = new ObservableCollection<ChatContent>()
-            });
-            tmpList.Add(new ChatWithUser
-            {
-                UserName = "Bello2",
-                NickName = "Nick2",
-                UID = 1344251,
-                chats = new ObservableCollection<ChatContent>()
-            });
-            tmpList.Add(new ChatWithUser
-            {
-                UserName = "Cello3",
-                NickName = "Nick3",
-                UID = 1344252,
-                chats = new ObservableCollection<ChatContent>()
-            });
+                new ChatWithUser
+                {
+                    UserName = "Aello1",
+                    NickName = "Nick1",
+                    UID = 1344250,
+                    chats = new ObservableCollection<ChatContent>()
+                },
+                new ChatWithUser
+                {
+                    UserName = "Bello2",
+                    NickName = "Nick2",
+                    UID = 1344251,
+                    chats = new ObservableCollection<ChatContent>()
+                },
+                new ChatWithUser
+                {
+                    UserName = "Cello3",
+                    NickName = "Nick3",
+                    UID = 1344252,
+                    chats = new ObservableCollection<ChatContent>()
+                }
+            };
 
             //Aello1
             tmpList[0].chats.Add(new ChatContent
@@ -131,39 +133,41 @@ namespace ModernChatLite
         }
         static void ResetContacts()
         {
-            contactInfos = new ObservableCollection<ContactInfo>();
-            contactInfos.Add(new ContactInfo
+            contactInfos = new ObservableCollection<ContactInfo>
             {
-                UserName = "Aello1",
-                NickName = "nick1",
-                BirthDate = new DateOnly(2000, 10, 1),
-                UID = 1344250,
-                WhatsUp = "Hello there!1"
-            });
-            contactInfos.Add(new ContactInfo
-            {
-                UserName = "Bello2",
-                NickName = "nick2",
-                BirthDate = new DateOnly(2001, 10, 1),
-                UID = 1344251,
-                WhatsUp = "Hello there!2"
-            });
-            contactInfos.Add(new ContactInfo
-            {
-                UserName = "Cello3",
-                NickName = "nick3",
-                BirthDate = new DateOnly(2002, 10, 1),
-                UID = 1344252,
-                WhatsUp = "Hello there!3"
-            });
-            contactInfos.Add(new ContactInfo
-            {
-                UserName = "Dello4",
-                NickName = "nick4",
-                BirthDate = new DateOnly(2003, 10, 1),
-                UID = 1344253,
-                WhatsUp = "Hello there!4"
-            });
+                new ContactInfo
+                {
+                    UserName = "Aello1",
+                    NickName = "nick1",
+                    BirthDate = new DateOnly(2000, 10, 1),
+                    UID = 1344250,
+                    WhatsUp = "Hello there!1"
+                },
+                new ContactInfo
+                {
+                    UserName = "Bello2",
+                    NickName = "nick2",
+                    BirthDate = new DateOnly(2001, 10, 1),
+                    UID = 1344251,
+                    WhatsUp = "Hello there!2"
+                },
+                new ContactInfo
+                {
+                    UserName = "Cello3",
+                    NickName = "nick3",
+                    BirthDate = new DateOnly(2002, 10, 1),
+                    UID = 1344252,
+                    WhatsUp = "Hello there!3"
+                },
+                new ContactInfo
+                {
+                    UserName = "Dello4",
+                    NickName = "nick4",
+                    BirthDate = new DateOnly(2003, 10, 1),
+                    UID = 1344253,
+                    WhatsUp = "Hello there!4"
+                }
+            };
         }
         static void ResetCurrentUserInfo()
         {
@@ -178,23 +182,25 @@ namespace ModernChatLite
         }
         static void ResetGroupInfo()
         {
-            groupInfos = new ObservableCollection<GroupInfo>();
-            groupInfos.Add(new GroupInfo
+            groupInfos = new ObservableCollection<GroupInfo>
             {
-                GID = 14577,
-                GroupName = "mYgROUP",
-                GroupNickName = "mickName",
-                Owner = currentUserInfo,
-                Admins = new List<ContactInfo>
+                new GroupInfo
+                {
+                    GID = 14577,
+                    GroupName = "mYgROUP",
+                    GroupNickName = "mickName",
+                    Owner = currentUserInfo,
+                    Admins = new List<ContactInfo>
                 {
                     contactInfos[0],contactInfos[1]
                 },
-                AllMembers = new List<ContactInfo>
+                    AllMembers = new List<ContactInfo>
                 {
                     contactInfos[2],contactInfos[3]
                 },
-                chats = chatData[1].chats
-            });
+                    chats = chatData[1].chats
+                }
+            };
         }
         static void ResetNotifications()
         {

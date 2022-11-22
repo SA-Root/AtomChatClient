@@ -48,15 +48,14 @@ namespace ModernChatLite
             });
             if (res != null)
             {
-                CurrentUserDatas.currentUserInfo = new()
-                {
-                    UID = uint.Parse(res.UID)
-                };
+                CurrentUserDatas.currentUserInfo.UID = uint.Parse(res.UID);
                 CurrentUserDatas.Token= res.Token;
                 MainFrameController.NavigateToPage(typeof(MainPage));
             }
             else
             {
+                UserNameBox.Text = null;
+                PwdBox.Password = null;
                 ContentDialog dialog = new()
                 {
                     // XamlRoot must be set in the case of a ContentDialog running in a Desktop app

@@ -55,8 +55,10 @@ namespace ModernChatLite
         }
         public void InitHClient()
         {
-            HClient = new HttpClient();
-            HClient.BaseAddress = new Uri(HttpServer);
+            HClient = new HttpClient
+            {
+                BaseAddress = new Uri(HttpServer)
+            };
         }
         public void InitWSClient()
         {
@@ -70,7 +72,8 @@ namespace ModernChatLite
         }
         public async Task<LoginResponse> SendLoginRequestAsync(LoginRequest loginRequest)
         {
-            var resp = await HClient.PostAsJsonAsync(new Uri(""), loginRequest);
+            var resp = await HClient.PostAsJsonAsync(new Uri("api/auth/login"),
+                loginRequest);
             if (resp.IsSuccessStatusCode)
             {
                 return await resp.Content.ReadFromJsonAsync<LoginResponse>();
