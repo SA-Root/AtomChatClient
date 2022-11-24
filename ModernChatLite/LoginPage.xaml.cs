@@ -49,7 +49,7 @@ namespace ModernChatLite
             if (res != null)
             {
                 CurrentUserDatas.currentUserInfo.UID = uint.Parse(res.UID);
-                CurrentUserDatas.Token= res.Token;
+                CurrentUserDatas.Token = res.Token;
                 MainFrameController.NavigateToPage(typeof(MainPage));
             }
             else
@@ -90,6 +90,11 @@ namespace ModernChatLite
             {
                 MainFrameController.NavigateToWebPage("https://microsoft.github.io/microsoft-ui-xaml/");
             }
+        }
+
+        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrameController.NavigateToWebPage("http://" + ServerAddressBox.Text);
         }
     }
 }
