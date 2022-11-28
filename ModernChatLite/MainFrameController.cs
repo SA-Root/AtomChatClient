@@ -127,6 +127,9 @@ namespace ModernChatLite
                 case "Follow System":
                     topFrame.RequestedTheme = ElementTheme.Default;
                     break;
+                default:
+                    topFrame.RequestedTheme = ElementTheme.Default;
+                    break;
             }
         }
         public static void NavigateToPage(Type pageType)

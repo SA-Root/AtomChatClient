@@ -96,5 +96,17 @@ namespace ModernChatLite
         {
             MainFrameController.NavigateToWebPage("http://" + ServerAddressBox.Text);
         }
+
+        private void DarkThemeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (DarkThemeToggle.IsChecked == true)
+            {
+                MainFrameController.SetTheme("Dark");
+            }
+            else
+            {
+                MainFrameController.SetTheme("Light");
+            }
+        }
     }
 }
